@@ -23,3 +23,21 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+import { routes } from '../fixtures/routes';
+import { LOGIN_BUTTON, PASSWORD_FIELD, PHONE_NUMBER_FIELD } from './selectors/login.selectors';
+
+Cypress.Commands.add('login', (account, password, url) => {
+    cy.intercept('POST', '/v1/login').as('login');
+    if (url) {
+        cy.visit(url);
+        cy.get('a').contains('Login').click();
+        cy.url().should('include', routes.login);
+    } else {
+        cy.visit(Cypress.env('url') + routes.login);
+    }
+    cy.get(PHONE_NUMBER_FIELD).type(account, { log: false });
+    cy.get(PASSWORD_FIELD).type(password, { log: false });
+    cy.get(LOGIN_BUTTON).click();
+    cy.wait('@login').its('response.statusCode').should('eq', 200);
+});
