@@ -10,6 +10,7 @@ module.exports = defineConfig({
         browser: 'chrome',
         pageLoadTimeout: 100000,
         defaultCommandTimeout: 10000,
+        specPattern: 'cypress/e2e/ui/*.cy.{js, jsx, ts, tsx}',
         video: false,
         retries: 0,
         scrollBehavior: 'center',

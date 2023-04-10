@@ -1,6 +1,6 @@
-import { messages } from '../fixtures/messages';
-import { routes } from '../fixtures/routes';
-import { ERROR_MESSAGE_TEXT, SUCCESS_MESSAGE_TEXT } from '../support/selectors/general.selectors';
+import { messages } from '../../fixtures/messages';
+import { routes } from '../../fixtures/routes';
+import { ERROR_MESSAGE_TEXT, SUCCESS_MESSAGE_TEXT } from '../../support/selectors/general.selectors';
 import {
     LOGIN_BUTTON,
     PASSWORD_FIELD,
@@ -8,7 +8,7 @@ import {
     PHONE_ERROR_MESSAGE,
     PHONE_NUMBER_FIELD,
     PROFILE,
-} from '../support/selectors/login.selectors';
+} from '../../support/selectors/login.selectors';
 
 const errorValidation = (message) => {
     cy.get(LOGIN_BUTTON).click();

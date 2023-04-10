@@ -1,4 +1,4 @@
-import { routes } from '../fixtures/routes';
+import { routes } from '../../fixtures/routes';
 import {
     MATCH_ODDS,
     SPORTS_ITEMS,
@@ -9,9 +9,9 @@ import {
     SELECTED_MATCH,
     MAXIMUM_BET_AMOUNT_EXCEEDED_PROMPT,
     AMOUNT,
-} from '../support/selectors/place_bet.selectors';
-import { messages } from '../fixtures/messages';
-import { ERROR_MESSAGE_TEXT } from '../support/selectors/general.selectors';
+} from '../../support/selectors/place_bet.selectors';
+import { messages } from '../../fixtures/messages';
+import { ERROR_MESSAGE_TEXT } from '../../support/selectors/general.selectors';
 
 let betId, shortBetId;
 
@@ -71,14 +71,14 @@ describe('Placing of Bets', () => {
     it('submit bet button is disabled when amount to bet is zero', () => {
         selectMatches();
 
-        cy.get(BET_AMOUNT_FIELD).invoke('val', '').clear(); // set bet amount to zero
+        cy.get(BET_AMOUNT_FIELD).invoke('val', '').clear().blur(); // set bet amount to zero
         cy.get(PLACE_BET_BUTTON).should('have.attr', 'disabled', 'disabled'); // place bet button should be disabled
     });
 
     it('remove all matches after selection', () => {
         selectMatches();
         cy.get(REMOVE_ALL_SELECTED_MATCHES_BUTTON).contains('Remove All').click();
-        cy.get(SELECTED_MATCHES_CONTAINER).should('not.be.visible').and('not.exist');
+        cy.get(SELECTED_MATCHES_CONTAINER).should('not.exist');
     });
 
     it('remove one match', () => {

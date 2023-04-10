@@ -8,11 +8,15 @@
         "report": "run-s report:*",
         "report:merge": "npx mochawesome-merge cypress/results/json/*.json -o cypress/results/mochawesome-bundle.json",
         "report:generate": "marge cypress/results/mochawesome-bundle.json -o cypress/reports/html",
-        "test:report": "npm-run-all precy:run cypress:run report report:merge report:generate"
+        "test:report": "npm-run-all precy:run cypress:run report report:merge report:generate",
+        "api:test": "jest cypress/e2e/api/api.test.js"
     },
     "author": "Jeremiah Hukpati",
     "license": "ISC",
     "devDependencies": {
+        "@babel/core": "7.21.4",
+        "@babel/preset-env": "7.21.4",
+        "babel-jest": "29.5.0",
         "cypress": "12.9.0",
         "cypress-multi-reporters": "1.6.3",
         "jest": "29.5.0",
