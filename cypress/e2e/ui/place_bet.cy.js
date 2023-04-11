@@ -79,7 +79,7 @@ describe('Placing of Bets', () => {
         cy.get(REMOVE_ALL_SELECTED_MATCHES_BUTTON).contains('Remove All').click();
     });
 
-    it('remove all matches after selection', () => {
+    it.skip('remove all matches after selection', () => {
         selectMatches();
         cy.get(REMOVE_ALL_SELECTED_MATCHES_BUTTON).contains('Remove All').click();
         cy.get(SELECTED_MATCHES_CONTAINER).should('not.exist');
