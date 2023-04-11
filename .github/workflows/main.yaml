@@ -1,0 +1,27 @@
+name: UI Automation Tests
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    cypress_tests:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Setup Node.js
+              uses: actions/setup-node@v1
+              with:
+                  node-version: '18.x'
+            - name: Install dependencies
+              run: npm install
+            - name: Run Cypress tests and generate mochawesome report
+              run: npm run test:report
+              env:
+                  CI: true
+            - name: Upload mochawesome report
+              uses: actions/upload-artifact@v1
+              with:
+                  name: mochawesome
+                  path: cypress/reports/html/mochawesome-bundle.html

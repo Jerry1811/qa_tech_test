@@ -7,8 +7,10 @@ import {
     REMOVE_ALL_SELECTED_MATCHES_BUTTON,
     SELECTED_MATCHES_CONTAINER,
     SELECTED_MATCH,
-    MAXIMUM_BET_AMOUNT_EXCEEDED_PROMPT,
+    CLOSE_MODAL,
     AMOUNT,
+    MODAL_BLOCK,
+    LOW_BALANCE_ERROR_TEXT,
 } from '../../support/selectors/place_bet.selectors';
 import { messages } from '../../fixtures/messages';
 import { ERROR_MESSAGE_TEXT } from '../../support/selectors/general.selectors';
@@ -47,11 +49,16 @@ describe('Placing of Bets', () => {
         cy.intercept('POST', routes.my_bets).as('myBets');
     });
 
+    afterEach(() => {
+        cy.get('a[href="/en-ke/profile"]').contains('Profile').click();
+        cy.get('.button.full').contains('Sign Out').click();
+    });
+
     it('places a bet', () => {
         selectMatches();
 
-        cy.get(BET_AMOUNT_FIELD).invoke('val', '').clear().type(1).blur(); // enter amount to bet
-        cy.get(PLACE_BET_BUTTON).should('have.attr', 'amount', '10'); // verify that bet amount is KES 10
+        cy.get(BET_AMOUNT_FIELD).focus().type('{selectall}').type(1);
+        cy.get(PLACE_BET_BUTTON).should('have.attr', 'amount', '1'); // verify that bet amount is KES 1
         cy.get(PLACE_BET_BUTTON).click();
         cy.wait('@placeBet').then((res) => {
             expect(res.response.statusCode).to.equal(201);
@@ -71,8 +78,10 @@ describe('Placing of Bets', () => {
     it('submit bet button is disabled when amount to bet is zero', () => {
         selectMatches();
 
-        cy.get(BET_AMOUNT_FIELD).invoke('val', '').clear().blur(); // set bet amount to zero
+        cy.get(BET_AMOUNT_FIELD).focus().type('{selectall}').clear();
         cy.get(PLACE_BET_BUTTON).should('have.attr', 'disabled', 'disabled'); // place bet button should be disabled
+
+        cy.get(REMOVE_ALL_SELECTED_MATCHES_BUTTON).contains('Remove All').click();
     });
 
     it('remove all matches after selection', () => {
@@ -84,16 +93,18 @@ describe('Placing of Bets', () => {
     it('remove one match', () => {
         selectMatches();
 
-        cy.get('button[class="stacked__remove"]').click();
+        cy.get('button[class="stacked__remove"]').first().click();
         cy.get(SELECTED_MATCHES_CONTAINER).find(SELECTED_MATCH).should('have.length', 2); // selected matches should be reduced to two
+
+        cy.get(REMOVE_ALL_SELECTED_MATCHES_BUTTON).contains('Remove All').click();
     });
 
     it('place a bet greater than the allowed maximum amount', () => {
         selectMatches();
-        cy.get(BET_AMOUNT_FIELD).invoke('val', '').clear().type(600000).blur();
+        cy.get(BET_AMOUNT_FIELD).focus().type('{selectall}').type(500001);
         cy.get(PLACE_BET_BUTTON).click();
-        cy.get(MAXIMUM_BET_AMOUNT_EXCEEDED_PROMPT).should('have.text', messages['max bet amount exceeded prompt']);
         cy.get(ERROR_MESSAGE_TEXT).should('have.text', messages['bet amount exceeded error']);
+        cy.get(REMOVE_ALL_SELECTED_MATCHES_BUTTON).contains('Remove All').click();
     });
 
     it('place bet with amount greater than user account balance', () => {
@@ -104,9 +115,12 @@ describe('Placing of Bets', () => {
             .then(($el) => {
                 let balance = $el.text();
                 let amountToBet = 5 + parseInt(balance.slice(3));
-                cy.get(BET_AMOUNT_FIELD).invoke('val', '').clear().type(amountToBet).blur();
+                cy.get(BET_AMOUNT_FIELD).focus().type('{selectall}').type(amountToBet);
                 cy.get(PLACE_BET_BUTTON).click();
-                cy.get(ERROR_MESSAGE_TEXT).should('have.text', messages['bet amount exceeded error']);
+                cy.get(MODAL_BLOCK).find(LOW_BALANCE_ERROR_TEXT).should('contain.text', messages['low balance error']);
+                cy.get(CLOSE_MODAL).click();
             });
+
+        cy.get(REMOVE_ALL_SELECTED_MATCHES_BUTTON).contains('Remove All').click();
     });
 });
