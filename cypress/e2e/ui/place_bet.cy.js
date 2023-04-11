@@ -49,11 +49,6 @@ describe('Placing of Bets', () => {
         cy.intercept('POST', routes.my_bets).as('myBets');
     });
 
-    afterEach(() => {
-        cy.get('a[href="/en-ke/profile"]').contains('Profile').click();
-        cy.get('.button.full').contains('Sign Out').click();
-    });
-
     it('places a bet', () => {
         selectMatches();
 
