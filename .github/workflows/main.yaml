@@ -14,6 +14,10 @@ jobs:
               uses: actions/setup-node@v1
               with:
                   node-version: '18.x'
+            - name: Set Cypress Env Variables
+              run: |
+                  echo '${{ secrets.CYPRESS_ENV_CI }}' > cypress.env.json
+
             - name: Install dependencies
               run: npm install
             - name: Run Cypress tests
