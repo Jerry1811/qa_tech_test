@@ -16,10 +16,13 @@ jobs:
                   node-version: '18.x'
             - name: Install dependencies
               run: npm install
-            - name: Run Cypress tests and generate mochawesome report
-              run: npm run test:report
+            - name: Run Cypress tests
+              run: npm test
               env:
                   CI: true
+            - name: Generate mochawesome report
+              run: npm run test:report
+
             - name: Upload mochawesome report
               uses: actions/upload-artifact@v1
               with:

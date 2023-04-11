@@ -5,10 +5,10 @@
         "precy:run": "rm -rf cypress/screenshots cypress/results cypress/reports",
         "cypress:open": "cypress open",
         "cypress:run": "cypress run",
-        "report": "run-s report:*",
-        "report:merge": "npx mochawesome-merge cypress/results/json/*.json -o cypress/results/mochawesome-bundle.json",
+        "test": "npm-run-all precy:run cypress:run",
+        "results:merge": "mochawesome-merge cypress/results/json/*.json > cypress/results/mochawesome-bundle.json",
         "report:generate": "marge cypress/results/mochawesome-bundle.json -o cypress/reports/html",
-        "test:report": "npm-run-all precy:run cypress:run report report:merge report:generate",
+        "test:report": "npm-run-all results:merge report:generate",
         "api:test": "jest cypress/e2e/api/api.test.js"
     },
     "author": "Jeremiah Hukpati",
