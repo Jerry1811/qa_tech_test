@@ -49,7 +49,7 @@ describe('Login Tests', () => {
         errorValidation(messages['invalid phone error']);
     });
 
-    it.only('login without credentials', () => {
+    it('login without credentials', () => {
         cy.visit(Cypress.env('url') + routes.login);
         errorValidation(messages['no phone error']);
     });

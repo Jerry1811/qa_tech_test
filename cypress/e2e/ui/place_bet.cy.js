@@ -41,7 +41,7 @@ const selectMatches = () => {
     cy.get(SELECTED_MATCHES_CONTAINER).find(SELECTED_MATCH).should('have.length', 3);
 };
 
-describe.skip('Placing of Bets', () => {
+describe('Placing of Bets', () => {
     beforeEach(() => {
         cy.login(Cypress.env('account'), Cypress.env('password'));
 
